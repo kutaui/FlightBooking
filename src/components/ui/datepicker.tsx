@@ -20,7 +20,6 @@ type DatepickerProps = {
 }
 
 export function DatePicker({date, setDate, isOneWay, children}: DatepickerProps) {
-    console.log(isOneWay)
     return (
         <Popover>
             <PopoverTrigger asChild>
