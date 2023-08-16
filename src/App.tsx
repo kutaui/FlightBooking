@@ -8,6 +8,8 @@ function App() {
     const [isOneWay, setIsOneWay] = React.useState<boolean>(false)
     const [date, setDate] = React.useState<Date>()
     const [departureTime, setDepartureTime] = useState([0, 48]);
+    const [returnTime, setReturnTime] = useState([0, 48]);
+
     const [duration, setDuration] = useState([1.5, 11.5])
 
 
@@ -15,8 +17,8 @@ function App() {
         <section className="max-w-[1440px] mx-auto items-center justify-center">
             <SearchFlight date={date} setDate={setDate} isOneWay={isOneWay} setIsOneWay={setIsOneWay}/>
             <div className="flex justify-center mt-10">
-                <FlightFilter duration={duration} setDuration={setDuration} departureTime={departureTime}
-                              setDepartureTime={setDepartureTime}/>
+                <FlightFilter setReturnTime={setReturnTime} returnTime={returnTime} duration={duration} setDuration={setDuration} departureTime={departureTime}
+                              setDepartureTime={setDepartureTime} isOneWay={isOneWay}/>
                 <FlightList/>
             </div>
         </section>
