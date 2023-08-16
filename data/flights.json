@@ -1,0 +1,37 @@
+{
+  "data": [
+    {
+      "from": "Adana",
+      "fromCode": "ADA",
+      "to": "Ankara",
+      "toCode": "ESB",
+      "date": "2023-08-20",
+      "departure": "12:00",
+      "arrival": "14:20",
+      "length": "2h 20",
+      "price": 100
+    },
+    {
+      "from": "Istanbul",
+      "fromCode": "IST",
+      "to": "Izmir",
+      "toCode": "ADB",
+      "date": "2023-08-22",
+      "departure": "08:30",
+      "arrival": "10:00",
+      "length": "1h 30",
+      "price": 120
+    },
+    {
+      "from": "Antalya",
+      "fromCode": "AYT",
+      "to": "Bodrum",
+      "toCode": "BJV",
+      "date": "2023-08-25",
+      "departure": "15:45",
+      "arrival": "17:30",
+      "length": "1h 45",
+      "price": 80
+    }
+  ]
+}
