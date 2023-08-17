@@ -6,6 +6,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import {useEffect} from "react";
 
 function convertValueToTime(value: number) {
     if (value === 48) {
@@ -18,7 +19,7 @@ function convertValueToTime(value: number) {
 }
 
 function convertValueToDuration(value: number) {
-    return value * 0.5; // Convert user-readable duration to hours
+    return value * 60; // Convert user-readable duration to hours
 }
 
 
@@ -47,7 +48,7 @@ export const FlightFilter = ({
                                  setSortValue,
                                  setDuration,
                                  setReturnTime,
-                                 setDeparture
+                                 setDeparture,
                              }: FlightFilterProps) => {
 
 
@@ -66,6 +67,16 @@ export const FlightFilter = ({
         const newDuration = [convertValueToDuration(newValues[0]), convertValueToDuration(newValues[1])];
         setDuration(newDuration);
     }
+
+    // if I don't do this on the initial load the flights are empty because they are not converted yet
+    useEffect(() => {
+        const newDuration = [
+            convertValueToDuration(durationRealTime[0]),
+            convertValueToDuration(durationRealTime[1]),
+        ];
+        setDuration(newDuration);
+    }, []);
+
     return (
         <aside className="w-[22%]">
             <Select onValueChange={setSortValue}>

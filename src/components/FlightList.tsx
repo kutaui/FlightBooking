@@ -32,7 +32,7 @@ export const FlightList = ({departure, to, duration, from, sortValue}: FlightLis
     useEffect(() => {
         async function fetchFlights() {
             try {
-                const response = await fetch("http://localhost:3000/flights");
+                const response = await fetch("https://flights-api-vt7q.onrender.com/flights");
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -48,6 +48,7 @@ export const FlightList = ({departure, to, duration, from, sortValue}: FlightLis
 
         fetchFlights();
     }, []);
+console.log(duration)
     useEffect(() => {
         const filterFlights = () => {
             const lowerFrom = from.toLowerCase();
@@ -55,14 +56,20 @@ export const FlightList = ({departure, to, duration, from, sortValue}: FlightLis
             return flights.filter((flight) => {
                 const lowerFlightFrom = flight.from.toLowerCase();
                 const lowerFlightTo = flight.to.toLowerCase();
-                const flightDuration = parseFloat(flight.length.split(":")[0]);
+                const [hours, minutes] = flight.length.split(":").map(parseFloat);
+                const flightDurationInMinutes = hours * 60 + minutes; // Convert hours to minutes
+console.log()
+                const minDurationInMinutes = duration[0];
+                const maxDurationInMinutes = duration[1];
+
                 return (
                     lowerFlightFrom.includes(lowerFrom) &&
                     lowerFlightTo.includes(lowerTo) &&
-                    flightDuration >= duration[0] && flightDuration <= duration[1]
+                    flightDurationInMinutes >= minDurationInMinutes && flightDurationInMinutes <= maxDurationInMinutes
                 );
             });
         };
+
 
 
         const sortFlights = (flightsToSort: Flight[]) => {
