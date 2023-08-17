@@ -1,6 +1,7 @@
 import {Button} from "@/components/ui/button.tsx";
 import {useEffect, useState} from "react";
 import FlightLoadingSkeleton from "@/components/FlightLoadingSkeleton.tsx";
+import convertValueToTime from "@/lib/ConvertValueToTime.ts";
 
 type FlightListProps = {
     duration: number[]
@@ -48,29 +49,38 @@ export const FlightList = ({departure, to, duration, from, sortValue}: FlightLis
 
         fetchFlights();
     }, []);
-console.log(duration)
+
+
     useEffect(() => {
         const filterFlights = () => {
             const lowerFrom = from.toLowerCase();
             const lowerTo = to.toLowerCase();
+
+            const [minDepartureHour, minDepartureMinute] = departure[0].toString().split(":").map(Number);
+            const [maxArrivalHour, maxArrivalMinute] = departure[1].toString().split(":").map(Number);
+
             return flights.filter((flight) => {
                 const lowerFlightFrom = flight.from.toLowerCase();
                 const lowerFlightTo = flight.to.toLowerCase();
-                const [hours, minutes] = flight.length.split(":").map(parseFloat);
-                const flightDurationInMinutes = hours * 60 + minutes; // Convert hours to minutes
-console.log()
+
+                const [durationHours, durationMinutes] = flight.length.split(":").map(Number);
+                const flightDurationInMinutes = durationHours * 60 + durationMinutes;
                 const minDurationInMinutes = duration[0];
                 const maxDurationInMinutes = duration[1];
+
+                const [flightDepartureHour, flightDepartureMinute] = flight.departure.split(":").map(Number);
+                const [flightArrivalHour, flightArrivalMinute] = flight.arrival.split(":").map(Number);
 
                 return (
                     lowerFlightFrom.includes(lowerFrom) &&
                     lowerFlightTo.includes(lowerTo) &&
-                    flightDurationInMinutes >= minDurationInMinutes && flightDurationInMinutes <= maxDurationInMinutes
+                    flightDurationInMinutes >= minDurationInMinutes &&
+                    flightDurationInMinutes <= maxDurationInMinutes &&
+                    (flightDepartureHour > minDepartureHour || (flightDepartureHour === minDepartureHour && flightDepartureMinute >= minDepartureMinute)) &&
+                    (flightArrivalHour < maxArrivalHour || (flightArrivalHour === maxArrivalHour && flightArrivalMinute <= maxArrivalMinute))
                 );
             });
         };
-
-
 
         const sortFlights = (flightsToSort: Flight[]) => {
             let sorted: Flight[] = [...flightsToSort];
@@ -79,8 +89,8 @@ console.log()
                 sorted.sort((a, b) => a.price - b.price);
             } else if (sortValue === "fastest") {
                 sorted.sort((a, b) => {
-                    const [hoursA, minutesA] = a.length.split("h ").map(parseFloat);
-                    const [hoursB, minutesB] = b.length.split("h ").map(parseFloat);
+                    const [hoursA, minutesA] = a.length.split(":").map(parseFloat);
+                    const [hoursB, minutesB] = b.length.split(":").map(parseFloat);
 
                     const totalDurationA = hoursA * 60 + minutesA;
                     const totalDurationB = hoursB * 60 + minutesB;
@@ -94,7 +104,7 @@ console.log()
 
         const filteredAndSortedFlights = sortFlights(filterFlights());
         setFilteredFlights(filteredAndSortedFlights);
-    }, [flights, from, to, sortValue, duration]);
+    }, [flights, from, to, sortValue, duration, departure]);
 
 
     return (

@@ -7,19 +7,10 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import {useEffect} from "react";
-
-function convertValueToTime(value: number) {
-    if (value === 48) {
-        return "23:59";
-    }
-    const minutes = value * 30;
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
-}
+import convertValueToTime from "@/lib/ConvertValueToTime.ts";
 
 function convertValueToDuration(value: number) {
-    return value * 60; // Convert user-readable duration to hours
+    return value * 60; // Convert user-readable duration to minutes
 }
 
 
@@ -68,12 +59,21 @@ export const FlightFilter = ({
         setDuration(newDuration);
     }
 
+    const handleDepartureTimeChange = (newValues: number[]) => {
+        const newValue = [convertValueToTime(newValues[0]), convertValueToTime(newValues[1])];
+        setDeparture(newValue);
+    }
+
+
     // if I don't do this on the initial load the flights are empty because they are not converted yet
     useEffect(() => {
         const newDuration = [
             convertValueToDuration(durationRealTime[0]),
             convertValueToDuration(durationRealTime[1]),
         ];
+
+        const newValue = [convertValueToTime(departureRealTime[0]), convertValueToTime(departureRealTime[1])];
+        setDeparture(newValue);
         setDuration(newDuration);
     }, []);
 
@@ -99,7 +99,7 @@ export const FlightFilter = ({
                     max={48}
                     step={1}
                     onValueChange={handleDepartureChange}
-                    onValueCommit={setDeparture}
+                    onValueCommit={handleDepartureTimeChange}
                     minStepsBetweenThumbs={1}
                     className="w-[250px] h-10"
                 />
