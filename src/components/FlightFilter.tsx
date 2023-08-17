@@ -18,91 +18,94 @@ function convertValueToTime(value: number) {
 }
 
 type FlightFilterProps = {
-    departureTime: number[]
-    setDepartureTime: (value: number[]) => void;
-    returnTime: number[];
-    setReturnTime: (value: number[]) => void;
-    duration: number[];
-    setDuration: (value: number[]) => void;
+    departureRealTime: number[]
+    setDepartureRealTime: (value: number[]) => void;
+    returnRealTime: number[];
+    setReturnRealTime: (value: number[]) => void;
+    durationRealTime: number[];
+    setDurationRealTime: (value: number[]) => void;
     isOneWay?: boolean
+    setSortValue: (value: string) => void
+    setDuration: (value: number[]) => void
+    setDeparture: (value: number[]) => void
+    setReturnTime: (value: number[]) => void
 }
 
 export const FlightFilter = ({
-                                 departureTime,
-                                 setDepartureTime,
-                                 duration,
+                                 departureRealTime,
+                                 setDepartureRealTime,
+                                 durationRealTime,
+                                 setDurationRealTime,
+                                 returnRealTime,
+                                 setReturnRealTime,
+                                 isOneWay,
+                                 setSortValue,
                                  setDuration,
-                                 returnTime,
                                  setReturnTime,
-                                 isOneWay
+                                 setDeparture
                              }: FlightFilterProps) => {
 
 
-    const consoleLog = () => {
-        console.log(departureTime)
-        console.log(duration)
-    }
     const handleDepartureChange = (newValues: number[]) => {
-        setDepartureTime(newValues);
+        setDepartureRealTime(newValues);
     };
 
     const handleArrivalChange = (newValues: number[]) => {
-        setReturnTime(newValues);
+        setReturnRealTime(newValues);
     }
 
     const handleDurationChange = (newValues: number[]) => {
-        setDuration(newValues);
+        setDurationRealTime(newValues);
     };
 
     return (
         <aside className="w-[22%]">
-            <Select>
+            <Select onValueChange={setSortValue}>
                 <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Sıralama Ölçütü"/>
                 </SelectTrigger>
                 <SelectContent className="bg-white">
-                    <SelectItem className="hover:bg-gray-200" value="light">En ucuz</SelectItem>
-                    <SelectItem className="hover:bg-gray-200" value="dark">En Hızlı</SelectItem>
-                    <SelectItem className="hover:bg-gray-200" value="system">System</SelectItem>
+                    <SelectItem className="hover:bg-gray-200" value="cheapest">En ucuz</SelectItem>
+                    <SelectItem className="hover:bg-gray-200" value="fastest">En Hızlı</SelectItem>
                 </SelectContent>
             </Select>
 
             <div>
                 <h3 className="font-bold mb-4 text-xl">Kalkış Saatleri</h3>
                 <h5 className="font-bold">Gidiş</h5>
-                <p className="text-xs">{convertValueToTime(departureTime[0])} - {convertValueToTime(departureTime[1])}</p>
+                <p className="text-xs">{convertValueToTime(departureRealTime[0])} - {convertValueToTime(departureRealTime[1])}</p>
                 <Slider
-                    defaultValue={departureTime}
+                    defaultValue={departureRealTime}
                     min={0}
                     max={48}
                     step={1}
                     onValueChange={handleDepartureChange}
+                    onValueCommit={setDeparture}
                     minStepsBetweenThumbs={1}
                     className="w-[250px] h-10"
                 />
                 {!isOneWay && <><h5 className="font-bold">Dönüş</h5><p
-                    className="text-xs">{convertValueToTime(returnTime[0])} - {convertValueToTime(returnTime[1])}</p>
+                    className="text-xs">{convertValueToTime(returnRealTime[0])} - {convertValueToTime(returnRealTime[1])}</p>
                     <Slider
-                        defaultValue={departureTime}
+                        defaultValue={returnRealTime}
                         min={0}
                         max={48}
                         step={1}
                         onValueChange={handleArrivalChange}
-                        onValueCommit={consoleLog}
+                        onValueCommit={setReturnTime}
                         minStepsBetweenThumbs={1}
                         className="w-[250px] h-10"/></>}
             </div>
             <div className="mt-10">
                 <h3 className="font-bold mb-1 text-xl">Uçuş Süresi</h3>
-                <p className="text-xs">{duration[0]} - {duration[1]}</p>
+                <p className="text-xs">{durationRealTime[0]} saat - {durationRealTime[1]} saat</p>
                 <Slider
-                    defaultValue={duration}
+                    defaultValue={durationRealTime}
                     min={1.5}
                     max={11.5}
                     step={0.5}
                     onValueChange={handleDurationChange}
-                    onBlur={consoleLog}
-
+                    onValueCommit={setDuration}
                     className="w-[250px] h-10"
                 />
             </div>
