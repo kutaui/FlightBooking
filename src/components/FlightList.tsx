@@ -24,7 +24,7 @@ type Flight = {
     company: string
 }
 
-export const FlightList = ({departure,  to, duration, from, sortValue}: FlightListProps) => {
+export const FlightList = ({departure, to, duration, from, sortValue}: FlightListProps) => {
     const [flights, setFlights] = useState<Flight[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [filteredFlights, setFilteredFlights] = useState<Flight[]>([]);
@@ -48,7 +48,6 @@ export const FlightList = ({departure,  to, duration, from, sortValue}: FlightLi
 
         fetchFlights();
     }, []);
-
     useEffect(() => {
         const filterFlights = () => {
             const lowerFrom = from.toLowerCase();
@@ -56,11 +55,15 @@ export const FlightList = ({departure,  to, duration, from, sortValue}: FlightLi
             return flights.filter((flight) => {
                 const lowerFlightFrom = flight.from.toLowerCase();
                 const lowerFlightTo = flight.to.toLowerCase();
+                const flightDuration = parseFloat(flight.length.split(":")[0]);
                 return (
-                    lowerFlightFrom.includes(lowerFrom) && lowerFlightTo.includes(lowerTo)
+                    lowerFlightFrom.includes(lowerFrom) &&
+                    lowerFlightTo.includes(lowerTo) &&
+                    flightDuration >= duration[0] && flightDuration <= duration[1]
                 );
             });
         };
+
 
         const sortFlights = (flightsToSort: Flight[]) => {
             let sorted: Flight[] = [...flightsToSort];
@@ -84,8 +87,7 @@ export const FlightList = ({departure,  to, duration, from, sortValue}: FlightLi
 
         const filteredAndSortedFlights = sortFlights(filterFlights());
         setFilteredFlights(filteredAndSortedFlights);
-    }, [flights, from, to, sortValue]);
-
+    }, [flights, from, to, sortValue, duration]);
 
 
     return (

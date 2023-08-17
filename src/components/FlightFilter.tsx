@@ -17,6 +17,11 @@ function convertValueToTime(value: number) {
     return `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
 }
 
+function convertValueToDuration(value: number) {
+    return value * 0.5; // Convert user-readable duration to hours
+}
+
+
 type FlightFilterProps = {
     departureRealTime: number[]
     setDepartureRealTime: (value: number[]) => void;
@@ -54,10 +59,13 @@ export const FlightFilter = ({
         setReturnRealTime(newValues);
     }
 
-    const handleDurationChange = (newValues: number[]) => {
+    const handleRealTimeDurationChange = (newValues: number[]) => {
         setDurationRealTime(newValues);
     };
-
+    const handleDurationChange = (newValues: number[]) => {
+        const newDuration = [convertValueToDuration(newValues[0]), convertValueToDuration(newValues[1])];
+        setDuration(newDuration);
+    }
     return (
         <aside className="w-[22%]">
             <Select onValueChange={setSortValue}>
@@ -104,8 +112,8 @@ export const FlightFilter = ({
                     min={1.5}
                     max={11.5}
                     step={0.5}
-                    onValueChange={handleDurationChange}
-                    onValueCommit={setDuration}
+                    onValueChange={handleRealTimeDurationChange}
+                    onValueCommit={handleDurationChange}
                     className="w-[250px] h-10"
                 />
             </div>
