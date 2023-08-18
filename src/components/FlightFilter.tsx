@@ -16,6 +16,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
+import {Button} from "@/components/ui/button.tsx";
 
 function convertValueToDuration(value: number) {
     return value * 60; // Convert user-readable duration to minutes
@@ -139,8 +140,8 @@ export const FlightFilter = ({
                     className="w-[250px] h-10"
                 />
             </div>
-            <Dialog>
-                <DialogTrigger>Click for flight dates</DialogTrigger>
+            <Dialog >
+                <DialogTrigger className="mt-6"><Button className="hover:bg-black hover:text-white border"> Click for flight dates</Button> </DialogTrigger>
                 <DialogContent className="bg-white">
                     <DialogHeader>
                         <DialogTitle>Try these departure dates for filtering</DialogTitle>
