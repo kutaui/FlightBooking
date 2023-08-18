@@ -31,8 +31,8 @@ export const FlightList = ({departure, to, duration, from, sortValue, departureD
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [filteredFlights, setFilteredFlights] = useState<Flight[]>([]);
     const formattedDate = departureDate ? format(departureDate, "yyyy-MM-dd") : null;
-
     const [fetchError, setFetchError] = useState<string | null>(null);
+    const [filtersApplied, setFiltersApplied] = useState<boolean>(false); // New state
 
     useEffect(() => {
         async function fetchFlights() {
@@ -46,7 +46,8 @@ export const FlightList = ({departure, to, duration, from, sortValue, departureD
                 setTimeout(() => {
                     setIsLoading(false);
                 }, 1000);
-                setFetchError(null); // Clear any previous errors on successful fetch
+                setFetchError(null);
+                setFiltersApplied(true); // Mark filters as applied on successful fetch
             } catch (error) {
                 setIsLoading(false);
                 setFetchError('Error fetching flights. Please try again later.');
@@ -56,7 +57,6 @@ export const FlightList = ({departure, to, duration, from, sortValue, departureD
 
         fetchFlights();
     }, []);
-
 
     useEffect(() => {
         const filterFlights = () => {
@@ -116,12 +116,12 @@ export const FlightList = ({departure, to, duration, from, sortValue, departureD
 
     return (
         <div className="w-[46%]">
-            {fetchError && ( // Render error message if there's a fetch error
+            {fetchError && (
                 <div className="flex justify-center mt-10">
                     <p className="text-red-500 text-2xl">{fetchError}</p>
                 </div>
             )}
-            {filteredFlights.length === 0 && !fetchError && ( // Render "No flights found" message only if there's no fetch error
+            {(!fetchError && filtersApplied && filteredFlights.length === 0) && (
                 <div className="flex justify-center mt-10">
                     <p className="text-2xl">No flights found</p>
                 </div>
