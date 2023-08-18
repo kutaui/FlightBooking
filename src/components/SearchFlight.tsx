@@ -3,6 +3,7 @@ import {Checkbox} from "@/components/ui/checkbox.tsx";
 import {DatePicker} from "@/components/ui/datepicker.tsx";
 import React, {useState} from "react";
 import {z} from "zod";
+import {Label} from "@/components/ui/label.tsx";
 
 type SearchFlightProps = {
     setFrom: (from: string) => void
@@ -64,11 +65,11 @@ export const SearchFlight = ({isOneWay, setIsOneWay, setDepartureDate, departure
     const checkHandler = () => {
         setIsOneWay(!isOneWay)
     }
-
     return (
         <nav className="flex w-full justify-center">
             <div className="w-[20%]">
-                <Input onChange={fromHandler} placeholder="Departure Airport" className="placeholder-gray-600 "/>
+                <Label htmlFor="from">From</Label>
+                <Input id="from" onChange={fromHandler} placeholder="Istanbul" className="placeholder-gray-400 "/>
                 {fromError && <p className="text-red-500 text-sm mt-1">{fromError}</p>}
 
                 <div className="flex items-center space-x-2 ">
@@ -78,12 +79,15 @@ export const SearchFlight = ({isOneWay, setIsOneWay, setDepartureDate, departure
                 </div>
             </div>
             <div className="w-[20%]">
-            <Input onChange={toHandler} placeholder="Arrival Airport" className="placeholder-gray-600 w-full"/>
+                <Label htmlFor="To">To</Label>
+
+            <Input id="to" onChange={toHandler} placeholder="Ankara" className="placeholder-gray-400 w-full"/>
             {toError && <p className="text-red-500 text-sm mt-1">{toError}</p>}
             </div>
+            <div className="mt-6">
             <DatePicker date={departureDate} setDate={setDepartureDate}>Departure Date</DatePicker>
             <DatePicker setDate={setReturnDate} date={returnDate} isOneWay={isOneWay}>Return Date</DatePicker>
-
+            </div>
         </nav>
     )
 }

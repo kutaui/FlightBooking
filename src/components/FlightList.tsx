@@ -114,8 +114,11 @@ export const FlightList = ({departure, to, duration, from, sortValue, departureD
         setFilteredFlights(filteredAndSortedFlights);
     }, [flights, from, to, sortValue, duration, departure, formattedDate]);
 
+    console.log(filteredFlights.length);
+
     return (
         <div className="w-[46%]">
+            {filteredFlights.length > 0 && <h2>Listing {filteredFlights.length} flights</h2>}
             {fetchError && (
                 <div className="flex justify-center mt-10">
                     <p className="text-red-500 text-2xl">{fetchError}</p>
@@ -135,6 +138,7 @@ export const FlightList = ({departure, to, duration, from, sortValue, departureD
             ) : (
                 filteredFlights.map((flight, index) => (
                     <div className="flex space-x-5 border h-48 " key={index}>
+
                         <img src={flight.company} alt="Airplane Image" className="ml-10 mt-10 w-[120px] h-[100px]"/>
                         <div className="mt-14 pl-12">
                             <h2 className="w-14">{flight.from}</h2>

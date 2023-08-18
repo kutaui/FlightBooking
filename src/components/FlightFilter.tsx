@@ -8,6 +8,14 @@ import {
 } from "@/components/ui/select"
 import {useEffect} from "react";
 import convertValueToTime from "@/lib/ConvertValueToTime.ts";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
 
 function convertValueToDuration(value: number) {
     return value * 60; // Convert user-readable duration to minutes
@@ -131,6 +139,26 @@ export const FlightFilter = ({
                     className="w-[250px] h-10"
                 />
             </div>
+            <Dialog>
+                <DialogTrigger>Click for flight dates</DialogTrigger>
+                <DialogContent className="bg-white">
+                    <DialogHeader>
+                        <DialogTitle>Try these departure dates for filtering</DialogTitle>
+                        <DialogDescription className="">
+                            <p>2023-08-20</p>
+                            <p>2023-08-22</p>
+                            <p>2023-08-25</p>
+                            <p>2023-08-21</p>
+                            <p>2023-08-26</p>
+                            <p>2023-08-29</p>
+                            <p>2023-09-02</p>
+                            <p>2023-09-05</p>
+                            <p>2023-09-11</p>
+                            <p>2023-09-14</p>
+                        </DialogDescription>
+                    </DialogHeader>
+                </DialogContent>
+            </Dialog>
         </aside>
     );
 };
