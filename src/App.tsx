@@ -6,7 +6,8 @@ import {FlightFilter} from "@/components/FlightFilter.tsx";
 
 function App() {
     const [isOneWay, setIsOneWay] = useState<boolean>(false)
-    const [date, setDate] = useState<Date>()
+    const [departureDate, setDepartureDate] = useState<Date>()
+    const [returnDate, setReturnDate] = useState<Date>()
     const [departureRealTime, setDepartureRealTime] = useState([0, 48]);
     const [departure, setDeparture] = useState<number[]>([0, 48])
     const [returnRealTime, setReturnRealTime] = useState([0, 48]);
@@ -20,7 +21,7 @@ function App() {
 
     return (
         <section className="max-w-[1440px] mx-auto items-center justify-center">
-            <SearchFlight setFrom={setFrom} setTo={setTo} date={date} setDate={setDate} isOneWay={isOneWay}
+            <SearchFlight returnDate={returnDate} setReturnDate={setReturnDate} setFrom={setFrom} setTo={setTo}  setDepartureDate={setDepartureDate} departureDate={departureDate} isOneWay={isOneWay}
                           setIsOneWay={setIsOneWay}/>
             <div className="flex justify-center mt-10">
                 <FlightFilter setSortValue={setSortValue} setReturnRealTime={setReturnRealTime}
@@ -28,7 +29,7 @@ function App() {
                               setDurationRealTime={setDurationRealTime} departureRealTime={departureRealTime}
                               setDepartureRealTime={setDepartureRealTime} isOneWay={isOneWay}
                               setDuration={setDuration} setReturnTime={setReturnTime} setDeparture={setDeparture}/>
-                <FlightList departure={departure} returnTime={returnTime} duration={duration} sortValue={sortValue} to={to} from={from}/>
+                <FlightList departureDate={departureDate} departure={departure} returnTime={returnTime} duration={duration} sortValue={sortValue} to={to} from={from}/>
             </div>
         </section>
     )

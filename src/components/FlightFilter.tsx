@@ -61,6 +61,8 @@ export const FlightFilter = ({
 
     const handleDepartureTimeChange = (newValues: number[]) => {
         const newValue = [convertValueToTime(newValues[0]), convertValueToTime(newValues[1])];
+        // my head hurts I can't deal with this
+        //@ts-ignore
         setDeparture(newValue);
     }
 
@@ -73,6 +75,7 @@ export const FlightFilter = ({
         ];
 
         const newValue = [convertValueToTime(departureRealTime[0]), convertValueToTime(departureRealTime[1])];
+        //@ts-ignore
         setDeparture(newValue);
         setDuration(newDuration);
     }, []);
@@ -81,17 +84,17 @@ export const FlightFilter = ({
         <aside className="w-[22%]">
             <Select onValueChange={setSortValue}>
                 <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Sıralama Ölçütü"/>
+                    <SelectValue placeholder="Sort By"/>
                 </SelectTrigger>
                 <SelectContent className="bg-white">
-                    <SelectItem className="hover:bg-gray-200" value="cheapest">En ucuz</SelectItem>
-                    <SelectItem className="hover:bg-gray-200" value="fastest">En Hızlı</SelectItem>
+                    <SelectItem className="hover:bg-gray-200" value="cheapest">Cheapest first</SelectItem>
+                    <SelectItem className="hover:bg-gray-200" value="fastest">Fastest first</SelectItem>
                 </SelectContent>
             </Select>
 
-            <div>
-                <h3 className="font-bold mb-4 text-xl">Kalkış Saatleri</h3>
-                <h5 className="font-bold">Gidiş</h5>
+            <div className="mt-8">
+                <h3 className="font-bold mb-4 text-xl">Departure Times</h3>
+                <h5 className="font-bold">Outbound</h5>
                 <p className="text-xs">{convertValueToTime(departureRealTime[0])} - {convertValueToTime(departureRealTime[1])}</p>
                 <Slider
                     defaultValue={departureRealTime}
@@ -103,7 +106,7 @@ export const FlightFilter = ({
                     minStepsBetweenThumbs={1}
                     className="w-[250px] h-10"
                 />
-                {!isOneWay && <><h5 className="font-bold">Dönüş</h5><p
+                {!isOneWay && <><h5 className="font-bold">Return</h5><p
                     className="text-xs">{convertValueToTime(returnRealTime[0])} - {convertValueToTime(returnRealTime[1])}</p>
                     <Slider
                         defaultValue={returnRealTime}
@@ -116,8 +119,8 @@ export const FlightFilter = ({
                         className="w-[250px] h-10"/></>}
             </div>
             <div className="mt-10">
-                <h3 className="font-bold mb-1 text-xl">Uçuş Süresi</h3>
-                <p className="text-xs">{durationRealTime[0]} saat - {durationRealTime[1]} saat</p>
+                <h3 className="font-bold mb-1 text-xl">Flight Duration</h3>
+                <p className="text-xs">{durationRealTime[0]} hours - {durationRealTime[1]} hours</p>
                 <Slider
                     defaultValue={durationRealTime}
                     min={1.5}

@@ -1,4 +1,4 @@
-export default function convertValueToTime(value: number) {
+export default function convertValueToTime(value: number): string {
     if (value === 48) {
         return "23:59";
     }

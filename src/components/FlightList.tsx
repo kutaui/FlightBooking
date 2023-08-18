@@ -1,7 +1,7 @@
 import {Button} from "@/components/ui/button.tsx";
 import {useEffect, useState} from "react";
 import FlightLoadingSkeleton from "@/components/FlightLoadingSkeleton.tsx";
-import convertValueToTime from "@/lib/ConvertValueToTime.ts";
+import {format} from "date-fns";
 
 type FlightListProps = {
     duration: number[]
@@ -10,6 +10,7 @@ type FlightListProps = {
     from: string
     to: string
     sortValue: string
+    departureDate: Date | undefined
 }
 
 type Flight = {
@@ -25,10 +26,13 @@ type Flight = {
     company: string
 }
 
-export const FlightList = ({departure, to, duration, from, sortValue}: FlightListProps) => {
+export const FlightList = ({departure, to, duration, from, sortValue, departureDate}: FlightListProps) => {
     const [flights, setFlights] = useState<Flight[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [filteredFlights, setFilteredFlights] = useState<Flight[]>([]);
+    const formattedDate = departureDate ? format(departureDate, "yyyy-MM-dd") : null;
+
+    const [fetchError, setFetchError] = useState<string | null>(null);
 
     useEffect(() => {
         async function fetchFlights() {
@@ -42,7 +46,10 @@ export const FlightList = ({departure, to, duration, from, sortValue}: FlightLis
                 setTimeout(() => {
                     setIsLoading(false);
                 }, 1000);
+                setFetchError(null); // Clear any previous errors on successful fetch
             } catch (error) {
+                setIsLoading(false);
+                setFetchError('Error fetching flights. Please try again later.');
                 console.error('Error fetching flights:', error);
             }
         }
@@ -55,7 +62,6 @@ export const FlightList = ({departure, to, duration, from, sortValue}: FlightLis
         const filterFlights = () => {
             const lowerFrom = from.toLowerCase();
             const lowerTo = to.toLowerCase();
-
             const [minDepartureHour, minDepartureMinute] = departure[0].toString().split(":").map(Number);
             const [maxArrivalHour, maxArrivalMinute] = departure[1].toString().split(":").map(Number);
 
@@ -77,7 +83,9 @@ export const FlightList = ({departure, to, duration, from, sortValue}: FlightLis
                     flightDurationInMinutes >= minDurationInMinutes &&
                     flightDurationInMinutes <= maxDurationInMinutes &&
                     (flightDepartureHour > minDepartureHour || (flightDepartureHour === minDepartureHour && flightDepartureMinute >= minDepartureMinute)) &&
-                    (flightArrivalHour < maxArrivalHour || (flightArrivalHour === maxArrivalHour && flightArrivalMinute <= maxArrivalMinute))
+                    (flightArrivalHour < maxArrivalHour || (flightArrivalHour === maxArrivalHour && flightArrivalMinute <= maxArrivalMinute)) &&
+                    (formattedDate === null || flight.date === formattedDate) // Adjusted condition
+
                 );
             });
         };
@@ -104,11 +112,20 @@ export const FlightList = ({departure, to, duration, from, sortValue}: FlightLis
 
         const filteredAndSortedFlights = sortFlights(filterFlights());
         setFilteredFlights(filteredAndSortedFlights);
-    }, [flights, from, to, sortValue, duration, departure]);
-
+    }, [flights, from, to, sortValue, duration, departure, formattedDate]);
 
     return (
         <div className="w-[46%]">
+            {fetchError && ( // Render error message if there's a fetch error
+                <div className="flex justify-center mt-10">
+                    <p className="text-red-500 text-2xl">{fetchError}</p>
+                </div>
+            )}
+            {filteredFlights.length === 0 && !fetchError && ( // Render "No flights found" message only if there's no fetch error
+                <div className="flex justify-center mt-10">
+                    <p className="text-2xl">No flights found</p>
+                </div>
+            )}
             {isLoading ? (
                 <>
                     <FlightLoadingSkeleton/>
@@ -125,7 +142,7 @@ export const FlightList = ({departure, to, duration, from, sortValue}: FlightLis
                             <h3 className="text-gray-500">{flight.fromCode}</h3>
                         </div>
                         <div className="flex flex-col items-center mt-14">
-                            <p>{flight.length}</p>
+                            <p>{flight.length} hr</p>
                             <div className="border border-black h-0 w-20"/>
                         </div>
                         <div className="mt-14">
@@ -140,7 +157,6 @@ export const FlightList = ({departure, to, duration, from, sortValue}: FlightLis
                     </div>
                 ))
             )}
-
         </div>
     )
 }
