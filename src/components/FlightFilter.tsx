@@ -18,6 +18,14 @@ import {
 } from "@/components/ui/dialog"
 import {Button} from "@/components/ui/button.tsx";
 
+import {
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from "@/components/ui/sheet"
+
 function convertValueToDuration(value: number) {
     return value * 60; // Convert user-readable duration to minutes
 }
@@ -89,8 +97,89 @@ export const FlightFilter = ({
         setDuration(newDuration);
     }, []);
 
-    return (
-        <aside className="w-[22%]">
+    return (<>
+        {/* this is mobile filter*/}
+        <aside className="hidden sm:block sm:w-full sm:justify-center sm:items-center sm:flex">
+            <Sheet>
+                <SheetTrigger className="" asChild><Button className="hover:bg-black hover:text-white border">Filter Flights</Button></SheetTrigger>
+                <SheetContent className="bg-white">
+                    <SheetHeader className="mb-8">
+                        <SheetTitle >Filter Flights</SheetTitle>
+
+                    </SheetHeader>
+                    <Select onValueChange={setSortValue}>
+                        <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="Sort By"/>
+                        </SelectTrigger>
+                        <SelectContent className="bg-white">
+                            <SelectItem className="hover:bg-gray-200" value="cheapest">Cheapest first</SelectItem>
+                            <SelectItem className="hover:bg-gray-200" value="fastest">Fastest first</SelectItem>
+                        </SelectContent>
+                    </Select>
+
+                    <div className="mt-8">
+                        <h3 className="font-bold mb-4 text-xl">Departure Times</h3>
+                        <h5 className="font-bold">Outbound</h5>
+                        <p className="text-xs">{convertValueToTime(departureRealTime[0])} - {convertValueToTime(departureRealTime[1])}</p>
+                        <Slider
+                            defaultValue={departureRealTime}
+                            min={0}
+                            max={48}
+                            step={1}
+                            onValueChange={handleDepartureChange}
+                            onValueCommit={handleDepartureTimeChange}
+                            minStepsBetweenThumbs={1}
+                            className="w-[250px] h-10"
+                        />
+                        {!isOneWay && <><h5 className="font-bold">Return</h5><p
+                            className="text-xs">{convertValueToTime(returnRealTime[0])} - {convertValueToTime(returnRealTime[1])}</p>
+                            <Slider
+                                defaultValue={returnRealTime}
+                                min={0}
+                                max={48}
+                                step={1}
+                                onValueChange={handleArrivalChange}
+                                onValueCommit={setReturnTime}
+                                minStepsBetweenThumbs={1}
+                                className="w-[250px] h-10"/></>}
+                    </div>
+                    <div className="mt-10">
+                        <h3 className="font-bold mb-1 text-xl">Flight Duration</h3>
+                        <p className="text-xs">{durationRealTime[0]} hours - {durationRealTime[1]} hours</p>
+                        <Slider
+                            defaultValue={durationRealTime}
+                            min={1.5}
+                            max={11.5}
+                            step={0.5}
+                            onValueChange={handleRealTimeDurationChange}
+                            onValueCommit={handleDurationChange}
+                            className="w-[250px] h-10"
+                        />
+                    </div>
+                    <Dialog >
+                        <DialogTrigger className="mt-6"><Button className="hover:bg-black hover:text-white border"> Click for flight dates</Button> </DialogTrigger>
+                        <DialogContent className="bg-white">
+                            <DialogHeader>
+                                <DialogTitle>Try these departure dates for filtering</DialogTitle>
+                                <DialogDescription className="">
+                                    <p>2023-08-20</p>
+                                    <p>2023-08-22</p>
+                                    <p>2023-08-25</p>
+                                    <p>2023-08-21</p>
+                                    <p>2023-08-26</p>
+                                    <p>2023-08-29</p>
+                                    <p>2023-09-02</p>
+                                    <p>2023-09-05</p>
+                                    <p>2023-09-11</p>
+                                    <p>2023-09-14</p>
+                                </DialogDescription>
+                            </DialogHeader>
+                        </DialogContent>
+                    </Dialog>
+                </SheetContent>
+            </Sheet>
+        </aside>
+        <aside className="w-[22%] sm:hidden">
             <Select onValueChange={setSortValue}>
                 <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Sort By"/>
@@ -161,5 +250,5 @@ export const FlightFilter = ({
                 </DialogContent>
             </Dialog>
         </aside>
-    );
+    </> );
 };

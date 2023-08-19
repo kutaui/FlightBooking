@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import FlightLoadingSkeleton from "@/components/FlightLoadingSkeleton.tsx";
 import {format} from "date-fns";
 
+
 type FlightListProps = {
     duration: number[]
     departure: number[]
@@ -117,8 +118,8 @@ export const FlightList = ({departure, to, duration, from, sortValue, departureD
     console.log(filteredFlights.length);
 
     return (
-        <div className="w-[46%]">
-            {filteredFlights.length > 0 && <h2>Listing {filteredFlights.length} flights</h2>}
+        <div className="w-[46%] sm:w-[95%]">
+                {filteredFlights.length > 0 && <h2>Listing {filteredFlights.length} flights</h2>}
             {fetchError && (
                 <div className="flex justify-center mt-10">
                     <p className="text-red-500 text-2xl">{fetchError}</p>
@@ -137,26 +138,29 @@ export const FlightList = ({departure, to, duration, from, sortValue, departureD
                 </>
             ) : (
                 filteredFlights.map((flight, index) => (
-                    <div className="flex space-x-5 border h-48 " key={index}>
+                    <div className="space-x-5 border h-48 sm:h-56 sm:justify-center" key={index}>
+                        <div className="sm:flex sm:justify-around sm:border-b sm:pb-1 ">
+                            <img src={flight.company} alt="Airplane Image"
+                                 className="ml-10 mt-10 w-[120px] h-[100px] sm:w-16 sm:h-16 sm:absolute sm:mt-2 sm:ml-0 "/>
 
-                        <img src={flight.company} alt="Airplane Image" className="ml-10 mt-10 w-[120px] h-[100px]"/>
-                        <div className="mt-14 pl-12">
-                            <h2 className="w-14">{flight.from}</h2>
-                            <h2 className="text-2xl">{flight.departure}</h2>
-                            <h3 className="text-gray-500">{flight.fromCode}</h3>
+                            <div className="mt-14 pl-12 sm:flex sm:flex-col sm:pl-0 sm:mt-20">
+                                <h2 className="w-14 sm:w-4">{flight.from}</h2>
+                                <h2 className="text-2xl sm:text-sm">{flight.departure}</h2>
+                                <h3 className="text-gray-500">{flight.fromCode}</h3>
+                            </div>
+                            <div className="flex flex-col items-center mt-14 sm:mt-20 sm:pl-4">
+                                <p>{flight.length} hr</p>
+                                <div className="border border-black h-0 w-20"/>
+                            </div>
+                            <div className="mt-14 sm:flex sm:flex-col sm:mt-20">
+                                <h2 className="w-14">{flight.to}</h2>
+                                <h2 className="text-2xl sm:text-sm">{flight.arrival}</h2>
+                                <h3 className="text-gray-500">{flight.toCode}</h3>
+                            </div>
                         </div>
-                        <div className="flex flex-col items-center mt-14">
-                            <p>{flight.length} hr</p>
-                            <div className="border border-black h-0 w-20"/>
-                        </div>
-                        <div className="mt-14">
-                            <h2 className="w-14">{flight.to}</h2>
-                            <h2 className="text-2xl">{flight.arrival}</h2>
-                            <h3 className="text-gray-500">{flight.toCode}</h3>
-                        </div>
-                        <div className="mt-14 flex flex-col items-center ml-12">
-                            <p className="text-xl font-bold mb-2">${flight.price}</p>
-                            <Button className="w-[100px] border  hover:bg-black hover:text-white">Select</Button>
+                        <div className="mt-14 flex flex-col items-center ml-12 sm:mt-4 sm:flex-row sm:justify-center ">
+                            <p className="text-xl font-bold mb-2 sm:mr-4 sm:mb-0">${flight.price}</p>
+                            <Button className="w-[100px] border hover:bg-black hover:text-white">Select</Button>
                         </div>
                     </div>
                 ))

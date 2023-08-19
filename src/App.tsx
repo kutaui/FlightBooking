@@ -21,15 +21,17 @@ function App() {
 
     return (
         <section className="max-w-[1440px] mx-auto items-center justify-center">
-            <SearchFlight returnDate={returnDate} setReturnDate={setReturnDate} setFrom={setFrom} setTo={setTo}  setDepartureDate={setDepartureDate} departureDate={departureDate} isOneWay={isOneWay}
+            <SearchFlight returnDate={returnDate} setReturnDate={setReturnDate} setFrom={setFrom} setTo={setTo}
+                          setDepartureDate={setDepartureDate} departureDate={departureDate} isOneWay={isOneWay}
                           setIsOneWay={setIsOneWay}/>
-            <div className="flex justify-center mt-10">
+            <div className="flex justify-center mt-10 sm:block">
                 <FlightFilter setSortValue={setSortValue} setReturnRealTime={setReturnRealTime}
                               returnRealTime={returnRealTime} durationRealTime={durationRealTime}
                               setDurationRealTime={setDurationRealTime} departureRealTime={departureRealTime}
                               setDepartureRealTime={setDepartureRealTime} isOneWay={isOneWay}
                               setDuration={setDuration} setReturnTime={setReturnTime} setDeparture={setDeparture}/>
-                <FlightList departureDate={departureDate} departure={departure} returnTime={returnTime} duration={duration} sortValue={sortValue} to={to} from={from}/>
+                <FlightList departureDate={departureDate} departure={departure} returnTime={returnTime}
+                            duration={duration} sortValue={sortValue} to={to} from={from}/>
             </div>
         </section>
     )
