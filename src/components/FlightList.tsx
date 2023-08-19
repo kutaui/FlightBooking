@@ -2,17 +2,7 @@ import {Button} from "@/components/ui/button.tsx";
 import {useEffect, useState} from "react";
 import FlightLoadingSkeleton from "@/components/FlightLoadingSkeleton.tsx";
 import {format} from "date-fns";
-
-
-type FlightListProps = {
-    duration: number[]
-    departure: number[]
-    returnTime?: number[]
-    from: string
-    to: string
-    sortValue: string
-    departureDate: Date | undefined
-}
+import {useFlightContext} from "@/FlightContext.tsx";
 
 type Flight = {
     departure: string
@@ -27,13 +17,23 @@ type Flight = {
     company: string
 }
 
-export const FlightList = ({departure, to, duration, from, sortValue, departureDate}: FlightListProps) => {
+export const FlightList = () => {
+    const {
+        departureDate,
+        from,
+        sortValue,
+        duration,
+        departure,
+        to,
+    } = useFlightContext()
+
     const [flights, setFlights] = useState<Flight[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [filteredFlights, setFilteredFlights] = useState<Flight[]>([]);
     const formattedDate = departureDate ? format(departureDate, "yyyy-MM-dd") : null;
     const [fetchError, setFetchError] = useState<string | null>(null);
-    const [filtersApplied, setFiltersApplied] = useState<boolean>(false); // New state
+    const [filtersApplied, setFiltersApplied] = useState<boolean>(false);
+
 
     useEffect(() => {
         async function fetchFlights() {
@@ -115,7 +115,6 @@ export const FlightList = ({departure, to, duration, from, sortValue, departureD
         setFilteredFlights(filteredAndSortedFlights);
     }, [flights, from, to, sortValue, duration, departure, formattedDate]);
 
-    console.log(filteredFlights.length);
 
     return (
         <div className="w-[46%] sm:w-[95%]">

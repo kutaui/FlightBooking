@@ -4,31 +4,24 @@ import {DatePicker} from "@/components/ui/datepicker.tsx";
 import React, {useState} from "react";
 import {z} from "zod";
 import {Label} from "@/components/ui/label.tsx";
+import {useFlightContext} from "@/FlightContext.tsx";
 
-type SearchFlightProps = {
-    setFrom: (from: string) => void
-    setTo: (to: string) => void
-    isOneWay: boolean
-    setIsOneWay: (isOneWay: boolean) => void
-    setDepartureDate: (date: Date | undefined) => void
-    departureDate: Date | undefined
-    returnDate: Date | undefined
-    setReturnDate: (date: Date | undefined) => void
-}
 
 const inputSchema = z.string().regex(/^[a-z]+$/)
 
 
-export const SearchFlight = ({
-                                 isOneWay,
-                                 setIsOneWay,
-                                 setDepartureDate,
-                                 departureDate,
-                                 setFrom,
-                                 setTo,
-                                 setReturnDate,
-                                 returnDate
-                             }: SearchFlightProps) => {
+export const SearchFlight = () => {
+
+    const {
+        isOneWay,
+        setIsOneWay,
+        setDepartureDate,
+        departureDate,
+        setFrom,
+        setReturnDate,
+        returnDate,
+        setTo,
+    } = useFlightContext()
 
     const [fromError, setFromError] = useState<string | null>(null);
     const [toError, setToError] = useState<string | null>(null);
