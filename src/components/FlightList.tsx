@@ -139,16 +139,16 @@ export const FlightList = ({departure, to, duration, from, sortValue, departureD
             ) : (
                 filteredFlights.map((flight, index) => (
                     <div className="space-x-5 border h-48 sm:h-56 sm:justify-center" key={index}>
-                        <div className="sm:flex sm:justify-around sm:border-b sm:pb-1 ">
+                        <div className="flex  sm:justify-around sm:border-b sm:pb-1 w-full ">
                             <img src={flight.company} alt="Airplane Image"
                                  className="ml-10 mt-10 w-[120px] h-[100px] sm:w-16 sm:h-16 sm:absolute sm:mt-2 sm:ml-0 "/>
 
-                            <div className="mt-14 pl-12 sm:flex sm:flex-col sm:pl-0 sm:mt-20">
+                            <div className="mt-14 ml-14 sm:flex sm:flex-col sm:pl-0 sm:mt-20">
                                 <h2 className="w-14 sm:w-4">{flight.from}</h2>
                                 <h2 className="text-2xl sm:text-sm">{flight.departure}</h2>
                                 <h3 className="text-gray-500">{flight.fromCode}</h3>
                             </div>
-                            <div className="flex flex-col items-center mt-14 sm:mt-20 sm:pl-4">
+                            <div className="flex flex-col px-8 items-center mt-14 sm:mt-20 sm:pl-4">
                                 <p>{flight.length} hr</p>
                                 <div className="border border-black h-0 w-20"/>
                             </div>
@@ -157,8 +157,12 @@ export const FlightList = ({departure, to, duration, from, sortValue, departureD
                                 <h2 className="text-2xl sm:text-sm">{flight.arrival}</h2>
                                 <h3 className="text-gray-500">{flight.toCode}</h3>
                             </div>
+                            <div className="mt-14 flex flex-col items-center ml-12 sm:hidden ">
+                                <p className="text-xl font-bold mb-2 sm:mr-4 sm:mb-0">${flight.price}</p>
+                                <Button className="w-[100px] border hover:bg-black hover:text-white">Select</Button>
+                            </div>
                         </div>
-                        <div className="mt-14 flex flex-col items-center ml-12 sm:mt-4 sm:flex-row sm:justify-center ">
+                        <div className="mt-14 hidden flex-col items-center ml-12 sm:mt-4 sm:flex sm:flex-row sm:justify-center ">
                             <p className="text-xl font-bold mb-2 sm:mr-4 sm:mb-0">${flight.price}</p>
                             <Button className="w-[100px] border hover:bg-black hover:text-white">Select</Button>
                         </div>
