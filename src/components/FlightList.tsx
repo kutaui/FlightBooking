@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import FlightLoadingSkeleton from "@/components/FlightLoadingSkeleton.tsx";
 import {format} from "date-fns";
 import {useFlightContext} from "@/context/FlightContext.tsx";
+import RenderIf from "@/components/RenderIf.tsx";
 
 type Flight = {
     departure: string
@@ -31,7 +32,7 @@ export const FlightList = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [filteredFlights, setFilteredFlights] = useState<Flight[]>([]);
     const formattedDate = departureDate ? format(departureDate, "yyyy-MM-dd") : null;
-    const [fetchError, setFetchError] = useState<string | null>(null);
+    const [fetchError, setFetchError] = useState<boolean>(false);
     const [filtersApplied, setFiltersApplied] = useState<boolean>(false);
 
 
@@ -47,11 +48,11 @@ export const FlightList = () => {
                 setTimeout(() => {
                     setIsLoading(false);
                 }, 1000);
-                setFetchError(null);
+
                 setFiltersApplied(true); // Mark filters as applied on successful fetch
             } catch (error) {
                 setIsLoading(false);
-                setFetchError('Error fetching flights. Please try again later.');
+                setFetchError(true);
                 console.error('Error fetching flights:', error);
             }
         }
@@ -118,28 +119,28 @@ export const FlightList = () => {
 
     return (
         <div className="w-[46%] sm:w-[95%]">
-            {filteredFlights.length > 0 && <h2>Listing {filteredFlights.length} flights</h2>}
-            {fetchError && (
+            <RenderIf condition={filteredFlights.length > 0}>
+                <h2>Listing {filteredFlights.length} flights</h2>
+            </RenderIf>
+            <RenderIf condition={fetchError}>
                 <div className="flex justify-center mt-10">
-                    <p className="text-red-500 text-2xl">{fetchError}</p>
+                    <p className="text-red-500 text-2xl">Error fetching flights. Please try again later.</p>
                 </div>
-            )}
-            {(!fetchError && filtersApplied && filteredFlights.length === 0) && (
+            </RenderIf>
+            <RenderIf condition={!fetchError && filtersApplied && filteredFlights.length === 0}>
                 <div className="flex justify-center mt-10">
                     <p className="text-2xl">No flights found</p>
                 </div>
-            )}
-            {isLoading ? (
-                <>
-                    <FlightLoadingSkeleton/>
-                    <FlightLoadingSkeleton/>
-                    <FlightLoadingSkeleton/>
-                </>
-            ) : (
-                filteredFlights.map((flight, index) => (
+            </RenderIf>
+            <RenderIf condition={!isLoading} fallback={<>
+                <FlightLoadingSkeleton/>
+                <FlightLoadingSkeleton/>
+                <FlightLoadingSkeleton/>
+            </>}>
+                {filteredFlights.map((flight, index) => (
                     <div className="space-x-5 border h-48 sm:h-56 sm:justify-center" key={index}>
-                        <div className="flex  sm:justify-around sm:border-b sm:pb-1 w-full ">
-                            <img src={flight.company} alt="Airplane Image"
+                        <div className="flex sm:justify-around sm:border-b sm:pb-1 w-full ">
+                            <img src={flight.company} alt="Airline Company Logo"
                                  className="ml-10 mt-10 w-[120px] h-[100px] sm:w-16 sm:h-16 sm:absolute sm:mt-2 sm:ml-0 "/>
 
                             <div className="mt-14 ml-14 sm:flex sm:flex-col sm:pl-0 sm:mt-20">
@@ -166,9 +167,10 @@ export const FlightList = () => {
                             <p className="text-xl font-bold mb-2 sm:mr-4 sm:mb-0">${flight.price}</p>
                             <Button className="w-[100px] border hover:bg-black hover:text-white">Select</Button>
                         </div>
-                    </div>
-                ))
-            )}
+                    </div>))}
+            </RenderIf>
+
+
         </div>
     )
 }
