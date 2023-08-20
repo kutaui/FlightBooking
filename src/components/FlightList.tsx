@@ -2,7 +2,7 @@ import {Button} from "@/components/ui/button.tsx";
 import {useEffect, useState} from "react";
 import FlightLoadingSkeleton from "@/components/FlightLoadingSkeleton.tsx";
 import {format} from "date-fns";
-import {useFlightContext} from "@/FlightContext.tsx";
+import {useFlightContext} from "@/context/FlightContext.tsx";
 
 type Flight = {
     departure: string
@@ -118,7 +118,7 @@ export const FlightList = () => {
 
     return (
         <div className="w-[46%] sm:w-[95%]">
-                {filteredFlights.length > 0 && <h2>Listing {filteredFlights.length} flights</h2>}
+            {filteredFlights.length > 0 && <h2>Listing {filteredFlights.length} flights</h2>}
             {fetchError && (
                 <div className="flex justify-center mt-10">
                     <p className="text-red-500 text-2xl">{fetchError}</p>
@@ -161,7 +161,8 @@ export const FlightList = () => {
                                 <Button className="w-[100px] border hover:bg-black hover:text-white">Select</Button>
                             </div>
                         </div>
-                        <div className="mt-14 hidden flex-col items-center ml-12 sm:mt-4 sm:flex sm:flex-row sm:justify-center ">
+                        <div
+                            className="mt-14 hidden flex-col items-center ml-12 sm:mt-4 sm:flex sm:flex-row sm:justify-center ">
                             <p className="text-xl font-bold mb-2 sm:mr-4 sm:mb-0">${flight.price}</p>
                             <Button className="w-[100px] border hover:bg-black hover:text-white">Select</Button>
                         </div>

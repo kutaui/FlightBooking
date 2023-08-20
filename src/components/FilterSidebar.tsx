@@ -10,7 +10,7 @@ import {
     DialogTitle,
     DialogTrigger
 } from "@/components/ui/dialog.tsx";
-import {useFlightContext} from "@/FlightContext.tsx";
+import {useFlightContext} from "@/context/FlightContext.tsx";
 import {convertValueToTime} from "@/lib/ConvertValueToTime.ts";
 import {convertValueToDuration} from "@/lib/ConvertValueToTime.ts";
 

@@ -18,7 +18,7 @@ import {
 import {Button} from "@/components/ui/button.tsx";
 
 import {convertValueToDuration} from "@/lib/ConvertValueToTime.ts";
-import {useFlightContext} from "@/FlightContext.tsx";
+import {useFlightContext} from "@/context/FlightContext.tsx";
 import {FilterSidebar} from "@/components/FilterSidebar.tsx";
 
 
@@ -56,8 +56,6 @@ export const FlightFilter = () => {
 
     const handleDepartureTimeChange = (newValues: number[]) => {
         const newValue = [convertValueToTime(newValues[0]), convertValueToTime(newValues[1])];
-        // my head hurts I can't deal with this
-        //@ts-ignore
         setDeparture(newValue);
     }
 
@@ -70,7 +68,6 @@ export const FlightFilter = () => {
         ];
 
         const newValue = [convertValueToTime(departureRealTime[0]), convertValueToTime(departureRealTime[1])];
-        //@ts-ignore
         setDeparture(newValue);
         setDuration(newDuration);
     }, []);

@@ -1,9 +1,13 @@
-import  {createContext, useContext, useState} from 'react';
+import React, {createContext, useContext, useState} from 'react';
 
 
- const FlightContext = createContext<any>("");
+const FlightContext = createContext<any>("");
 
-export function FlightProvider({children}: any) {
+type Props = {
+    children: React.ReactNode
+}
+
+export function FlightProvider({children}: Props) {
     const [isOneWay, setIsOneWay] = useState<boolean>(false)
     const [departureDate, setDepartureDate] = useState<Date>()
     const [returnDate, setReturnDate] = useState<Date>()

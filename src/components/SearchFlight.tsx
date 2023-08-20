@@ -4,14 +4,13 @@ import {DatePicker} from "@/components/ui/datepicker.tsx";
 import React, {useState} from "react";
 import {z} from "zod";
 import {Label} from "@/components/ui/label.tsx";
-import {useFlightContext} from "@/FlightContext.tsx";
+import {useFlightContext} from "@/context/FlightContext.tsx";
 
 
 const inputSchema = z.string().regex(/^[a-z]+$/)
 
 
 export const SearchFlight = () => {
-
     const {
         isOneWay,
         setIsOneWay,
@@ -47,12 +46,12 @@ export const SearchFlight = () => {
         const inputValue = e.target.value;
         if (inputValue === '') {
             setTo(inputValue);
-            setToError(null); // Clear error when input is empty
+            setToError(null);
         } else {
             try {
                 inputSchema.parse(inputValue);
                 setTo(inputValue);
-                setToError(null); // Clear any existing error
+                setToError(null);
             } catch (error) {
                 if (error instanceof z.ZodError) {
                     setToError("Only letters allowed");
